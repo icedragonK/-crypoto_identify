@@ -3,6 +3,9 @@ import base64
 from scipy.special import gammaincc
 from scipy.special import gamma
 import binascii
+import os
+import random
+import string
 
 # compute function related to rt
 # compute rt
@@ -225,6 +228,39 @@ def frequency_test_block(filename,M):# WARNING M is the base64 size, if you want
         # print("x_obs = " + str(x_obs))
         ftb_pv = gammaincc(1.0*N/2,1.0*x_obs/2)
         return ftb_pv
+# mass produce keys
+
+def create_key(path):
+    folder = os.path.exists(path)
+    if not folder:
+        os.makedirs(path)
+    os.chdir(path)
+    keytext_path = path + '/key.txt'
+    keytext_folder = os.path.exists(keytext_path)
+    if not keytext_folder:
+        print("fuck")
+        f_obj = open('key.txt','w')
+        for i in range(0, 1000):
+            ran_str = ''.join(random.sample(string.ascii_letters + string.digits, 21))
+            f_obj.write(ran_str + '\n')
+        f_obj.close()
+    else:
+        print("The file is already exist!")
+# read big txt in to small txt
+
+def read_big_to_small(filename,size):
+    try:
+        f = open(filename)
+    except FileExistsError:
+        print("The file doesn't exist!!")
+    else:
+        while True:
+            chunk_data = f.read(size)
+            if not chunk_data:
+                break
+            yield chunk_data
+
+
 
 
 
